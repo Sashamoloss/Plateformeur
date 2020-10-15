@@ -914,8 +914,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b85bd92ceab25454b96cd654362e0ef9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Vitesse: 32
-  ForceDeSaut: 5
+  Vitesse: 24.96
+  ForceDeSaut: 11.86
   Masque:
     serializedVersion: 2
     m_Bits: 512
