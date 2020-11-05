@@ -41,13 +41,10 @@ public class player_behavior : MonoBehaviour
         CheckGround = hit.collider != null; //On met dans Checkground le résultat de la question "est-ce qu'il y a qqch dans le hit.collider ?"
         var ForceDirection = new Vector2(Direction, 0);
         myRigidBody.AddForce(ForceDirection * Vitesse);
-        if (myRigidBody.velocity.y < 0) //si le joueur tombe, alors on lance l'animation de chute
-            PlayerAnimator.SetTrigger("Fall");
-        if (Direction == -1)
-            myRenderer.flipX = true;
-        if (Direction == 1)
-            myRenderer.flipX = false;
-
+        //if (myRigidBody.velocity.y < - 0.1f) //si le joueur tombe, alors on lance l'animation de chute
+        //    PlayerAnimator.SetTrigger("Fall");
+        PlayerAnimator.SetFloat("VelocityY", myRigidBody.velocity.y);
+        PlayerAnimator.SetFloat("VitesseX", Mathf.Abs (myRigidBody.velocity.x));
         PlayerAnimator.SetBool("CheckGround",CheckGround);//Pour arrêter l'animation de chute si on touche le sol
         //Debug.DrawRay(transform.position, Vector2.down * 1.1f);
 
@@ -56,13 +53,16 @@ public class player_behavior : MonoBehaviour
     void Deplacement(InputAction.CallbackContext CBC)
     {
         Direction = CBC.ReadValue<float>();
-        PlayerAnimator.SetBool("Deplacement", true); //Pour lancer l'animation de déplacement
+        //PlayerAnimator.SetTrigger("Deplacement");
+        myRenderer.flipX = Direction == -1;
+        //PlayerAnimator.SetBool("Deplacement", true); //Pour lancer l'animation de déplacement
     }
 
     void DeplacementAnnule(InputAction.CallbackContext CBC)
     {
         Direction = 0;
-        PlayerAnimator.SetBool("Deplacement", false); //Pour arrêter l'animation de déplacement
+        //PlayerAnimator.ResetTrigger("Deplacement");
+        //PlayerAnimator.SetBool("Deplacement", false); //Pour arrêter l'animation de déplacement
     }
 
     void Saut(InputAction.CallbackContext CBC)
@@ -70,7 +70,7 @@ public class player_behavior : MonoBehaviour
         if (CheckGround) //Si on touche le sol, alors on peut sauter
         {
             myRigidBody.AddForce(transform.up * ForceDeSaut, ForceMode2D.Impulse);
-            PlayerAnimator.SetTrigger("Jump");
+            //PlayerAnimator.SetTrigger("Jump");
         }
         
 
