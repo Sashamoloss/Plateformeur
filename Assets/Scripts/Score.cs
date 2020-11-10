@@ -9,9 +9,13 @@ public class Score : MonoBehaviour
     private int totalScore;
     private TextMeshProUGUI txtMeshPro;
 
-    void Start()
+    private void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
         txtMeshPro = GetComponent<TextMeshProUGUI>();
     }
 
