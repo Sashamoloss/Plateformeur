@@ -5,9 +5,10 @@ using UnityEngine.InputSystem;
 
 public class player_behavior : MonoBehaviour
 {
-    [SerializeField] float Vitesse = 0;
-    [SerializeField] float ForceDeSaut = 0;
+    [SerializeField] float Vitesse;
+    [SerializeField] float ForceDeSaut;
     [SerializeField] LayerMask Masque;
+    [SerializeField] float VitesseMax; //Pour ne pas avoir d'accélération
     Animator PlayerAnimator;
     SpriteRenderer myRenderer;
     private Rigidbody2D myRigidBody;
@@ -43,6 +44,8 @@ public class player_behavior : MonoBehaviour
         myRigidBody.AddForce(ForceDirection * Vitesse);
         //if (myRigidBody.velocity.y < - 0.1f) //si le joueur tombe, alors on lance l'animation de chute
         //    PlayerAnimator.SetTrigger("Fall");
+        if (myRigidBody.velocity.x > VitesseMax)
+            myRigidBody.velocity = new Vector2 (VitesseMax,myRigidBody.velocity.y);//quand le joueur atteint la vitesse maximum, on bloque l'accélération horizontale de son rigidbody (on ne peut pas assigner rigidbody.velocity.x donc obligée de faire le truc avec tout le vecteur
         PlayerAnimator.SetFloat("VelocityY", myRigidBody.velocity.y);
         PlayerAnimator.SetFloat("VitesseX", Mathf.Abs (myRigidBody.velocity.x));
         PlayerAnimator.SetBool("CheckGround",CheckGround);//Pour arrêter l'animation de chute si on touche le sol
@@ -54,7 +57,7 @@ public class player_behavior : MonoBehaviour
     {
         Direction = CBC.ReadValue<float>();
         //PlayerAnimator.SetTrigger("Deplacement");
-        myRenderer.flipX = Direction == -1;
+        myRenderer.flipX = Direction == -1; //On met dans flipX le résultat de la comparaison "Direction est-il égal à -1"
         //PlayerAnimator.SetBool("Deplacement", true); //Pour lancer l'animation de déplacement
     }
 
