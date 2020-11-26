@@ -6,10 +6,12 @@ public class Ennemi : MonoBehaviour
 {
     [SerializeField] protected int pointsAwarded;
     [SerializeField] protected float Vitesse;
-    //[SerializeField] protected float VitesseMax; //Pour ne pas avoir d'accélération (mais si on en veut pas du tout autant utiliser la variable Vitesse ?)
     [SerializeField] protected Vector2 Direction;
+    [SerializeField] LayerMask Masque;
     Int_Event ennemiDetruit;
     protected Rigidbody2D myRigidBody;
+    protected SpriteRenderer myRenderer;
+
 
 
 
@@ -19,6 +21,8 @@ public class Ennemi : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>();
         ennemiDetruit = new Int_Event();
         ennemiDetruit.AddListener(Score.Instance.UpdateScore);
+        myRenderer = GetComponent<SpriteRenderer>();
+
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
@@ -30,14 +34,28 @@ public class Ennemi : MonoBehaviour
             //ennemiDetruit.Invoke(pointsAwarded);
             //Destroy(gameObject);
         }
+        if (collision.gameObject.CompareTag("Ground"))
+            ChangeDirection();
 
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    protected void FixedUpdate()
     {
-        myRigidBody.AddForce(Direction * Vitesse);
-        if (myRigidBody.velocity.x > Vitesse)
-            myRigidBody.velocity = new Vector2(Vitesse, myRigidBody.velocity.y);//quand l'ennemi atteint la vitesse maximum, on bloque l'accélération horizontale de son rigidbody (on ne peut pas assigner rigidbody.velocity.x donc obligée de faire le truc avec tout le vecteur
+        myRigidBody.velocity = new Vector2(Direction.x * Vitesse, myRigidBody.velocity.y);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + Direction, Vector2.down, 0.1f, Masque); //Raycast en bas pour checker si on touche le sol (avec un masque pour ne pas checker les colliders du player). On décale le pt de départ du RayCast en fonction de la variabl direction pour qu'il soit au bout de l'ennemi
+        Debug.DrawRay((Vector2)transform.position + Direction, Vector2.down * 0.1f);
+        if (hit.collider == null)
+            ChangeDirection();
+    }
+    protected void ChangeDirection()
+    {
+        myRenderer.flipX = !myRenderer.flipX;//on inverse la variable flipX
+        Direction *= Vector2.left;//là aussi on inverse la direction
+    }
+
+    protected void OnValidate()
+    {
+        Vitesse = Mathf.Clamp(Vitesse, 0f, float.MaxValue);//à chaque changement dans l'éditeur la vitesse est comprise entre 0 et le max de float
     }
 }
