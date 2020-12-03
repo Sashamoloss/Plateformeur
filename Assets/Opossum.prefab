@@ -141,6 +141,10 @@ MonoBehaviour:
   pointsAwarded: 58
   Vitesse: 1.48
   Direction: {x: -1, y: 0}
+  DecalageRayCast: {x: 0.3, y: 0}
+  Masque:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!60 &6896283986593408107
 PolygonCollider2D:
   m_ObjectHideFlags: 0
