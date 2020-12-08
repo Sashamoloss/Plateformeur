@@ -5,14 +5,15 @@ using UnityEngine;
 public class Ennemi : MonoBehaviour
 {
     [SerializeField] protected int pointsAwarded;
-    [SerializeField] protected float Vitesse;
-    [SerializeField] protected Vector2 Direction;
-    [SerializeField] protected Vector2 DecalageRayCast;
+    [SerializeField] [Range(0,float.MaxValue)] protected float Vitesse;
+    [SerializeField] [Range(0, 5)] protected float tailleRayCastSide;
+    [SerializeField] [Range(0, 5)] protected float tailleRayCastDown;
+    //[SerializeField] protected Vector2 DecalageRayCast;
     [SerializeField] LayerMask Masque;
     Int_Event ennemiDetruit;
     protected Rigidbody2D myRigidBody;
     protected SpriteRenderer myRenderer;
-
+    protected Vector2 Direction;
 
 
 
@@ -23,6 +24,7 @@ public class Ennemi : MonoBehaviour
         ennemiDetruit = new Int_Event();
         ennemiDetruit.AddListener(Score.Instance.UpdateScore);
         myRenderer = GetComponent<SpriteRenderer>();
+        Direction = Vector2.left;
 
     }
 
@@ -43,14 +45,18 @@ public class Ennemi : MonoBehaviour
     // Update is called once per frame
     protected void FixedUpdate()
     {
-        myRigidBody.velocity = new Vector2(Direction.x * Vitesse, myRigidBody.velocity.y);
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + Direction + DecalageRayCast, Vector2.down, 0.1f, Masque); 
+        myRigidBody.velocity = new Vector2(Direction.x * Vitesse, myRigidBody.velocity.y);//pour empêcher l'accélération
+        RaycastHit2D hitDown = Physics2D.Raycast((Vector2)transform.position + Direction + Vector2.up, Vector2.down, tailleRayCastDown, Masque);
         //Raycast en bas pour checker si on touche le sol (avec un masque pour ne pas checker les colliders du player). 
         //On décale le pt de départ du RayCast en fonction de la variable direction pour qu'il soit au bout de l'ennemi
         //+ une variable sérialisée pour qu'il soit toujours au bout quand il change de direction (mais pas trop loin)
-        Debug.DrawRay((Vector2)transform.position + Direction, Vector2.down * 0.1f);
-        if (hit.collider == null)
+        RaycastHit2D hitSide = Physics2D.Raycast((Vector2)myRenderer.bounds.center, Direction, tailleRayCastSide, Masque);
+        Debug.DrawRay((Vector2)myRenderer.bounds.center, Direction * tailleRayCastSide);
+        Debug.DrawRay((Vector2)transform.position + Direction + Vector2.up, Vector2.down * tailleRayCastDown);
+        if (hitDown.collider == null || hitSide.collider != null)
             ChangeDirection();
+        Debug.Log("Down: " + hitDown.collider);
+        Debug.Log("Side: " + hitSide.collider);
     }
     protected void ChangeDirection()
     {
@@ -60,7 +66,6 @@ public class Ennemi : MonoBehaviour
 
     protected void OnValidate()
     {
-        Vitesse = Mathf.Clamp(Vitesse, 0f, float.MaxValue);//à chaque changement dans l'éditeur la vitesse est comprise entre 0 et le max de float
-        DecalageRayCast.x = Mathf.Clamp(DecalageRayCast.x, 0f, 0.5f);// Pareillement le x du décalage du raycast sera compris entre 0 et 0.5
+        //DecalageRayCast.x = Mathf.Clamp(DecalageRayCast.x, 0f, 0.5f);//Le x du décalage du raycast sera compris entre 0 et 0.5
     }
 }
