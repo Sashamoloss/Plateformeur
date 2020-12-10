@@ -9,6 +9,8 @@ public class player_behavior : MonoBehaviour
     [SerializeField] float ForceDeSaut;
     [SerializeField] LayerMask Masque;
     [SerializeField] float VitesseMax; //Pour ne pas avoir d'accélération
+    [SerializeField] float slopeCompensation;
+    [SerializeField] [Range(0, 5)] protected float tailleRayCast;
     Animator PlayerAnimator;
     SpriteRenderer myRenderer;
     private Rigidbody2D myRigidBody;
@@ -38,19 +40,27 @@ public class player_behavior : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down,1.1f, Masque); //Raycast en bas pour checker si on touche le sol (avec un masque pour ne pas checker les colliders du player)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, tailleRayCast, Masque); //Raycast en bas pour checker si on touche le sol (avec un masque pour ne pas checker les colliders du player)
         CheckGround = hit.collider != null; //On met dans Checkground le résultat de la question "est-ce qu'il y a qqch dans le hit.collider ?"
-        var ForceDirection = new Vector2(Direction, 0);
-        myRigidBody.AddForce(ForceDirection * Vitesse);
+        Debug.DrawRay(transform.position, Vector2.down * tailleRayCast);
+        float verticalDirection;
+        var isClimbingLeft = myRenderer.flipX && hit.normal.x > 0; //si on est tourné à gauche et que la normale penche à droite
+        var isClimbingRight = !myRenderer.flipX && hit.normal.x < 0; //inversement
+        if (isClimbingLeft || isClimbingRight)
+            verticalDirection = slopeCompensation;
+        else 
+            verticalDirection = 0;
+        var ForceDirection = new Vector2(Direction, verticalDirection);
+        Debug.Log("verticaledirection "+ verticalDirection);
+        myRigidBody.AddForce(ForceDirection.normalized * Vitesse);
         //if (myRigidBody.velocity.y < - 0.1f) //si le joueur tombe, alors on lance l'animation de chute
         //    PlayerAnimator.SetTrigger("Fall");
-        if (myRigidBody.velocity.x > VitesseMax)
+        if (Mathf.Abs (myRigidBody.velocity.x) > VitesseMax)//la vélocité en valeur absolue car pê négative
             myRigidBody.velocity = new Vector2 (VitesseMax,myRigidBody.velocity.y);//quand le joueur atteint la vitesse maximum, on bloque l'accélération horizontale de son rigidbody (on ne peut pas assigner rigidbody.velocity.x donc obligée de faire le truc avec tout le vecteur
         PlayerAnimator.SetFloat("VelocityY", myRigidBody.velocity.y);
         PlayerAnimator.SetFloat("VitesseX", Mathf.Abs (myRigidBody.velocity.x));
         PlayerAnimator.SetBool("CheckGround",CheckGround);//Pour arrêter l'animation de chute si on touche le sol
         //Debug.DrawRay(transform.position, Vector2.down * 1.1f);
-
     }
 
     void Deplacement(InputAction.CallbackContext CBC)
