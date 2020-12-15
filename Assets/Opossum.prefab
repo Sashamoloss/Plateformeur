@@ -13,7 +13,9 @@ GameObject:
   - component: {fileID: 3148313677580833300}
   - component: {fileID: 3148313677580833305}
   - component: {fileID: 4611155619887341258}
-  - component: {fileID: 6896283986593408107}
+  - component: {fileID: 6811914968795772537}
+  - component: {fileID: 8121220034714299068}
+  - component: {fileID: 2209980679997164185}
   m_Layer: 10
   m_Name: Opossum
   m_TagString: Ennemi
@@ -121,7 +123,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: dfe487f083e08da458f17c1dcee710d6, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -140,13 +142,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointsAwarded: 58
   Vitesse: 1.48
-  Direction: {x: -1, y: 0}
-  DecalageRayCast: {x: 0.3, y: 0}
+  tailleRayCastSide: 0
+  tailleRayCastDown: 0
+  decalageRayCastDown: 0
+  slopeCompensation: 0
   Masque:
     serializedVersion: 2
     m_Bits: 512
---- !u!60 &6896283986593408107
-PolygonCollider2D:
+--- !u!70 &6811914968795772537
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -154,25 +158,42 @@ PolygonCollider2D:
   m_GameObject: {fileID: 3148313677580833302}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: dfe487f083e08da458f17c1dcee710d6, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1.75, y: 1.5625}
-    newSize: {x: 1.75, y: 1.5625}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.22410655, y: 0.9314485}
-      - {x: -0.23509383, y: 1.2468691}
-      - {x: -1.0442817, y: 1.2296371}
-      - {x: -0.9132645, y: 0.018345356}
-      - {x: 0.35617995, y: -0.005329013}
-      - {x: 1.0481863, y: 0.964831}
+  m_Offset: {x: -0.010377567, y: 0.66362554}
+  m_Size: {x: 1.5507605, y: 0.36334088}
+  m_Direction: 1
+--- !u!70 &8121220034714299068
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3148313677580833302}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.008648608, y: 0.27096632}
+  m_Size: {x: 1.3452426, y: 0.41048163}
+  m_Direction: 1
+--- !u!58 &2209980679997164185
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3148313677580833302}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.40070522, y: 0.8646214}
+  serializedVersion: 2
+  m_Radius: 0.16210055

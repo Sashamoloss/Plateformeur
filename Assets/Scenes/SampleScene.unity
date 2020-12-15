@@ -2320,9 +2320,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2209980679997164185, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: dfe487f083e08da458f17c1dcee710d6, type: 2}
     - target: {fileID: 3148313677580833302, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
       propertyPath: m_Name
       value: Opossum
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148313677580833305, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
+      propertyPath: m_Material
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3148313677580833306, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
       propertyPath: m_RootOrder
@@ -2374,7 +2382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4611155619887341258, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
       propertyPath: slopeCompensation
-      value: 2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4611155619887341258, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
       propertyPath: tailleRayCastDown
@@ -2384,6 +2392,14 @@ PrefabInstance:
       propertyPath: tailleRayCastSide
       value: 1.3
       objectReference: {fileID: 0}
+    - target: {fileID: 4611155619887341258, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
+      propertyPath: decalageRayCastDown
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6811914968795772537, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: dfe487f083e08da458f17c1dcee710d6, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc457e8732fb1b741867a44b64c61c05, type: 3}
 --- !u!1001 &7664127255590876283

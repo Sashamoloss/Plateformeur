@@ -52,7 +52,8 @@ public class player_behavior : MonoBehaviour
             verticalDirection = 0;
         var ForceDirection = new Vector2(Direction, verticalDirection);
         Debug.Log("verticaledirection "+ verticalDirection);
-        myRigidBody.AddForce(ForceDirection.normalized * Vitesse);
+        if (Direction != 0)
+            myRigidBody.AddForce(ForceDirection.normalized * Vitesse);
         //if (myRigidBody.velocity.y < - 0.1f) //si le joueur tombe, alors on lance l'animation de chute
         //    PlayerAnimator.SetTrigger("Fall");
         if (Mathf.Abs (myRigidBody.velocity.x) > VitesseMax)//la vélocité en valeur absolue car pê négative

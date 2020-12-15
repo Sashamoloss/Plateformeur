@@ -5,9 +5,10 @@ using UnityEngine;
 public class Ennemi : MonoBehaviour
 {
     [SerializeField] protected int pointsAwarded;
-    [SerializeField] [Range(0,float.MaxValue)] protected float Vitesse;
-    [SerializeField] [Range(0, 5)] protected float tailleRayCastSide;
-    [SerializeField] [Range(0, 5)] protected float tailleRayCastDown;
+    [SerializeField, Range(0,float.MaxValue)] protected float Vitesse;
+    [SerializeField, Range(0, 5)] protected float tailleRayCastSide;
+    [SerializeField, Range(0, 5)] protected float tailleRayCastDown;
+    [SerializeField, Range(0, 1)] protected float decalageRayCastDown;
     [SerializeField] float slopeCompensation;
     protected float verticalDirection = 0;
     //[SerializeField] protected Vector2 DecalageRayCast;
@@ -34,11 +35,10 @@ public class Ennemi : MonoBehaviour
     {
         if (collision.gameObject.CompareTag ("Player"))
         {
+            Debug.Log("Collision avec le player");
             //ennemiDetruit.Invoke(pointsAwarded);
             //Destroy(gameObject);
         }
-        if (collision.gameObject.CompareTag("Ground"))
-            ChangeDirection();
 
     }
 
@@ -46,13 +46,15 @@ public class Ennemi : MonoBehaviour
     protected void FixedUpdate()
     {
         myRigidBody.velocity = new Vector2(Direction.x * Vitesse, myRigidBody.velocity.y + verticalDirection);//pour empêcher l'accélération
-        RaycastHit2D hitDown = Physics2D.Raycast((Vector2)transform.position + Direction + Vector2.up, Vector2.down, tailleRayCastDown, Masque);
+        var rayCastDownOrigin = (Vector2)transform.position + Direction * decalageRayCastDown + Vector2.up;
+        RaycastHit2D hitDown = Physics2D.Raycast(rayCastDownOrigin, Vector2.down, tailleRayCastDown, Masque);
+        Debug.DrawRay(rayCastDownOrigin, Vector2.down * tailleRayCastDown);//DrawRay du RaycastDown
         //Raycast en bas pour checker si on touche le sol (avec un masque pour ne pas checker les colliders du player). 
         //On décale le pt de départ du RayCast en fonction de la variable direction pour qu'il soit au bout de l'ennemi
         //+ une variable sérialisée pour qu'il soit toujours au bout quand il change de direction (mais pas trop loin)
-        RaycastHit2D hitSide = Physics2D.Raycast((Vector2)myRenderer.bounds.center, Direction, tailleRayCastSide, Masque);
-        Debug.DrawRay((Vector2)myRenderer.bounds.center, Direction * tailleRayCastSide);
-        Debug.DrawRay((Vector2)transform.position + Direction + Vector2.up, Vector2.down * tailleRayCastDown);
+        var rayCastSideOrigin = (Vector2)myRenderer.bounds.center;
+        RaycastHit2D hitSide = Physics2D.Raycast(rayCastSideOrigin, Direction, tailleRayCastSide, Masque);
+        Debug.DrawRay(rayCastSideOrigin, Direction * tailleRayCastSide); //DrawRay du RayCastSide
         if (hitDown.collider == null || hitSide.collider != null)
             ChangeDirection();
         var isClimbingLeft = myRenderer.flipX && hitDown.normal.x > 0; //si on est tourné à gauche et que la normale penche à droite
